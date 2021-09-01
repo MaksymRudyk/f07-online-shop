@@ -1,3 +1,4 @@
 $(document).ready(function(){
-    $('.tabs').tabs();
+    let tabs = document.querySelector('.tabs')
+    var instance = M.Tabs.init(tabs, {});
 });
