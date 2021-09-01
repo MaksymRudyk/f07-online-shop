@@ -1,1 +1,4 @@
-var instance = M.Tabs.init(el, {});
+$(document).ready(function(){
+    $('#products').text('dwdadwad')
+    $('.tabs').tabs();
+});
