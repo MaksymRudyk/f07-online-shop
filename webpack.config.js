@@ -4,7 +4,6 @@ const webpack = require("webpack");
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-
 module.exports = {
     entry: './src/app.js',
     output: {
@@ -19,9 +18,14 @@ module.exports = {
             template: "./src/index.html"
         }),
         new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin(),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        }),
     ],
     module: {
-        rules: [ {
+        rules: [{
             test: /\.scss$/,
             use: [
                 {
@@ -40,6 +44,10 @@ module.exports = {
                 }
             ]
         },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
             {
                 test: /\.(jpg|png|svg|gif)$/,
                 use: [{
