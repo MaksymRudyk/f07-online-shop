@@ -1,46 +1,49 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path')
+const HTMLPlugin = require('html-webpack-plugin')
+const webpack = require("webpack");
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
     entry: './src/app.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        filename: "bundle.[chunkhash].js",
+        path: path.resolve(__dirname, 'public')
     },
-    module: {
-        rules: [
-            {
-                test: /\.scss$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: ''
-                        }
-                    },
-                    {
-                        loader: "css-loader",
-                        options: { url: false, sourceMap: true}
-                    }
-                    , {
-                        loader: "sass-loader",
-                        options: {sourceMap: true}
-                    }
-                ]
-            },
-            {
-                test: /\.(png|jpg|jpeg|gif)$/i,
-                loader: 'file-loader',
-                options: {outputPath: 'assets/images', publicPath: '../images', useRelativePaths: true}
-            },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/i,
-                loader: 'file-loader',
-                options: {outputPath: 'assets/fonts', publicPath: '../fonts', useRelativePaths: true}
-            },
-        ]
+    devServer: {
+        port: 3000,
     },
     plugins: [
-        new MiniCssExtractPlugin(),
-    ]
-};
+        new HTMLPlugin({
+            template: "./src/index.html"
+        }),
+        new CleanWebpackPlugin(),
+    ],
+    module: {
+        rules: [{
+            test: /\.css$/i,
+            use: ['style-loader', 'css-loader'],
+        },
+            {
+                test: /\.(jpg|png|svg|gif)$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: './',
+                        useRelativePath: true,
+                    }
+                },
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            mozjpeg: {
+                                progressive: true,
+                                quality: 80
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
